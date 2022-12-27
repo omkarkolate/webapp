@@ -65,6 +65,7 @@ export function Logs() {
           <Table sx={{}} stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
+                <TableCell>Index</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Time</TableCell>
                 <TableCell>Device Name</TableCell>
@@ -76,6 +77,7 @@ export function Logs() {
             <TableBody>
               {rows.map((row, index) => (
                 <TableRow key={index} sx={{}} hover>
+                  <TableCell>{index+1}</TableCell>
                   <TableCell>{row.date}</TableCell>
                   <TableCell>{row.time}</TableCell>
                   <TableCell>{row.device_name}</TableCell>
