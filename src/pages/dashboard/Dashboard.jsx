@@ -8,7 +8,7 @@ export function Dashboard() {
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs>
-            <Stack spacing={4}>
+            <Stack spacing={3}>
               <Box sx={{ borderRadius: 4, bgcolor: "#cd8942" }}>
                 <Typography
                   variant="h5"
@@ -31,7 +31,7 @@ export function Dashboard() {
                     color: "white",
                   }}
                 >
-                  Time
+                  25
                 </Typography>
               </Box>
               <Box sx={{ borderRadius: 4, bgcolor: "#5fbfd1" }}>
@@ -45,7 +45,7 @@ export function Dashboard() {
                     borderRadius: "16px 16px 0 0",
                   }}
                 >
-                  Total Time
+                  Total Alerts
                 </Typography>
                 <Typography
                   variant="h6"
@@ -56,7 +56,7 @@ export function Dashboard() {
                     color: "white",
                   }}
                 >
-                  Time
+                  10
                 </Typography>
               </Box>
               <Box sx={{ borderRadius: 4, bgcolor: "#a9b1cd" }}>
@@ -70,7 +70,7 @@ export function Dashboard() {
                     borderRadius: "16px 16px 0 0",
                   }}
                 >
-                  Total Time
+                  Current Active Alert
                 </Typography>
                 <Typography
                   variant="h6"
@@ -81,7 +81,7 @@ export function Dashboard() {
                     color: "white",
                   }}
                 >
-                  Time
+                  Active Alert
                 </Typography>
               </Box>
               <Box sx={{ borderRadius: 4, bgcolor: "#66a191" }}>
@@ -95,24 +95,127 @@ export function Dashboard() {
                     borderRadius: "16px 16px 0 0",
                   }}
                 >
-                  Total Time
+                  Recent Alert
                 </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    textAlign: "center",
-                    px: 4,
-                    py: 3,
-                    color: "white",
-                  }}
-                >
-                  Time
-                </Typography>
+                <Stack spacing={2} p={1}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textAlign: "center",
+                      color: "white",
+                    }}
+                  >
+                    Packlne value
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textAlign: "center",
+                      color: "white",
+                    }}
+                  >
+                    Andon value
+                  </Typography>
+                </Stack>
               </Box>
             </Stack>
           </Grid>
           <Grid item xs={6}>
-            Center
+            <Box borderRadius={4}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  borderRadius: "16px 16px 0 0",
+                  fontSize: 20,
+                  bgcolor: "#2261a2",
+                  color: "white",
+                  p: 1,
+                }}
+              >
+                Packlines
+              </Typography>
+              <Box
+                bgcolor="#0e3c6f"
+                p={2}
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignContent: "flex-start",
+                  borderRadius: "0 0 16px 16px",
+                }}
+              >
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+                <Box
+                  bgcolor="#993e27"
+                  p={2}
+                  py={3}
+                  color="white"
+                  borderRadius={4}
+                  m={1}
+                >
+                  Packline 1
+                </Box>
+              </Box>
+            </Box>
           </Grid>
           <Grid item xs>
             <Box sx={{ borderRadius: 4 }}>
@@ -128,49 +231,51 @@ export function Dashboard() {
                 Alerts
               </Typography>
 
-              <Box borderBottom={1} borderColor="#a9a9a1">
-                <Grid container>
-                  <Grid
-                    item
-                    xs={3}
-                    sx={{
-                      bgcolor: "#dededa",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography>0</Typography>
+              <Box sx={{overflowY: "scroll"}} >
+                <Box borderBottom={1} borderColor="#a9a9a1">
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={3}
+                      sx={{
+                        bgcolor: "#dededa",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography>0</Typography>
+                    </Grid>
+                    <Grid item xs>
+                      <Stack spacing={2} p={1}>
+                        <Typography>Packlne value</Typography>
+                        <Typography>Andon value</Typography>
+                      </Stack>
+                    </Grid>
                   </Grid>
-                  <Grid item xs>
-                    <Stack spacing={2} p={1}>
-                      <Typography>Packlne value</Typography>
-                      <Typography>Andon value</Typography>
-                    </Stack>
+                </Box>
+                <Box borderBottom={1} borderColor="#a9a9a1">
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={3}
+                      sx={{
+                        bgcolor: "#dededa",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography>0</Typography>
+                    </Grid>
+                    <Grid item xs>
+                      <Stack spacing={2} p={1}>
+                        <Typography>Packlne value</Typography>
+                        <Typography>Andon value</Typography>
+                      </Stack>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Box>
-              <Box borderBottom={1} borderColor="#a9a9a1">
-                <Grid container>
-                  <Grid
-                    item
-                    xs={3}
-                    sx={{
-                      bgcolor: "#dededa",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography>0</Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Stack spacing={2} p={1}>
-                      <Typography>Packlne value</Typography>
-                      <Typography>Andon value</Typography>
-                    </Stack>
-                  </Grid>
-                </Grid>
+                </Box>
               </Box>
             </Box>
           </Grid>
