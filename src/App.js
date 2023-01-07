@@ -13,17 +13,22 @@ function App() {
   const [loader, setLoader] = useState(true);
   const {user, setUser} = useAuth();
   const navigate = useNavigate();
-  
+  console.log("loged", user, loader);
   useEffect(() => {
     (async function(params) {
       const userId = localStorage.getItem("userId") || null;
+      
       const getUser = async (userId) => {
-        const response = await axios.get(`/user/${userId}`);
+        try {
+         const response = await axios.get(`/user/${userId}`);
 
-        if (response.data.success) {
-          setUser(response.data.user);
-        } else {
-          navigate("/login");
+         if (response.data.success) {
+           setUser(response.data.user);
+         } else {
+           navigate("/login");
+         } 
+        } catch (error) {
+          console.log(error);
         }
       };
 
