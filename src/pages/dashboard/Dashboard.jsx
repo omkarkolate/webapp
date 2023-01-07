@@ -4,7 +4,7 @@ import { Header } from "../../components";
 export function Dashboard() {
   return (
     <Box>
-      <Header />
+      <Header active="Dashboard" />
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs>
