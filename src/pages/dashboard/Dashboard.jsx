@@ -1,7 +1,23 @@
+import { useState, useEffect } from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import { Header } from "../../components";
+import axios from "axios";
 
 export function Dashboard() {
+  const [alerts, setAlerts] = useState([]);
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await axios.get("/alert");
+        console.log(response);
+        setAlerts(response.data.alerts);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
   return (
     <Box>
       <Header active="Dashboard" />
@@ -231,8 +247,33 @@ export function Dashboard() {
                 Alerts
               </Typography>
 
-              <Box sx={{overflowY: "scroll"}} >
-                <Box borderBottom={1} borderColor="#a9a9a1">
+              <Box sx={{ overflowY: "scroll" }}>
+                {alerts.map((alert) => (
+                  <Box borderBottom={1} borderColor="#a9a9a1" key={alert.alertId}>
+                    <Grid container>
+                      <Grid
+                        item
+                        xs={3}
+                        sx={{
+                          bgcolor: "#dededa",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography>{alert.status}</Typography>
+                      </Grid>
+                      <Grid item xs>
+                        <Stack spacing={2} p={1}>
+                          <Typography>{alert.groupName}</Typography>
+                          <Typography>{alert.deviceName}</Typography>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                ))}
+
+                {/* <Box borderBottom={1} borderColor="#a9a9a1">
                   <Grid container>
                     <Grid
                       item
@@ -275,7 +316,7 @@ export function Dashboard() {
                       </Stack>
                     </Grid>
                   </Grid>
-                </Box>
+                </Box> */}
               </Box>
             </Box>
           </Grid>
