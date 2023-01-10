@@ -10,7 +10,6 @@ export function Dashboard() {
     (async function () {
       try {
         const response = await axios.get("/alert");
-        console.log(response);
         setAlerts(response.data.alerts);
       } catch (error) {
         console.log(error);

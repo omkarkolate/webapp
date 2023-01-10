@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { RequireAuth } from "./components";
 import { useAuth } from "./context/AuthContext";
-import { Dashboard, Login, Logs } from "./pages";
+import { Dashboard, Login, Logs, Setting, User } from "./pages";
 
 axios.defaults.baseURL = "http://192.168.0.146:4000";
 
@@ -65,6 +65,22 @@ function App() {
             element={
               <RequireAuth>
                 <Logs />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="setting"
+            element={
+              <RequireAuth>
+                <Setting />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="setting/user"
+            element={
+              <RequireAuth>
+                <User />
               </RequireAuth>
             }
           />
