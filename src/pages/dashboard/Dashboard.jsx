@@ -260,7 +260,7 @@ export function Dashboard() {
                           alignItems: "center",
                         }}
                       >
-                        <Typography>{alert.status}</Typography>
+                        <Typography>{alert.input}</Typography>
                       </Grid>
                       <Grid item xs>
                         <Stack spacing={2} p={1}>
@@ -271,51 +271,6 @@ export function Dashboard() {
                     </Grid>
                   </Box>
                 ))}
-
-                {/* <Box borderBottom={1} borderColor="#a9a9a1">
-                  <Grid container>
-                    <Grid
-                      item
-                      xs={3}
-                      sx={{
-                        bgcolor: "#dededa",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Typography>0</Typography>
-                    </Grid>
-                    <Grid item xs>
-                      <Stack spacing={2} p={1}>
-                        <Typography>Packlne value</Typography>
-                        <Typography>Andon value</Typography>
-                      </Stack>
-                    </Grid>
-                  </Grid>
-                </Box>
-                <Box borderBottom={1} borderColor="#a9a9a1">
-                  <Grid container>
-                    <Grid
-                      item
-                      xs={3}
-                      sx={{
-                        bgcolor: "#dededa",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Typography>0</Typography>
-                    </Grid>
-                    <Grid item xs>
-                      <Stack spacing={2} p={1}>
-                        <Typography>Packlne value</Typography>
-                        <Typography>Andon value</Typography>
-                      </Stack>
-                    </Grid>
-                  </Grid>
-                </Box> */}
               </Box>
             </Box>
           </Grid>

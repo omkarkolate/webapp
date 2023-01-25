@@ -12,7 +12,6 @@ import { useState } from "react";
 
 export function Logs() {
   const [rows, setRows] = useState([]);
-  const date = new Date();
   useEffect(() => {
     const getLogs = async () => {
       try {
@@ -35,7 +34,7 @@ export function Logs() {
             mx: "auto",
             border: 1,
             borderColor: "#e0e0e0",
-            maxHeight: "82vh"
+            maxHeight: "82vh",
           }}
         >
           <Table sx={{}} stickyHeader aria-label="sticky table">
@@ -47,6 +46,7 @@ export function Logs() {
                 <TableCell>Shift</TableCell>
                 <TableCell>Group</TableCell>
                 <TableCell>Device Name</TableCell>
+                <TableCell>Input</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Down Time</TableCell>
               </TableRow>
@@ -54,12 +54,17 @@ export function Logs() {
             <TableBody>
               {rows.map((row, index) => (
                 <TableRow key={row.logId} hover>
-                  <TableCell>{index+1}</TableCell>
-                  <TableCell>{new Date(row.date).toLocaleDateString()}</TableCell>
-                  <TableCell>{row.time}</TableCell>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    {new Date(row.date).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(row.date).toLocaleTimeString('en')}
+                  </TableCell>
                   <TableCell>{row.shift}</TableCell>
                   <TableCell>{row.groupName}</TableCell>
                   <TableCell>{row.deviceName}</TableCell>
+                  <TableCell>{row.input}</TableCell>
                   <TableCell>{row.status}</TableCell>
                   <TableCell>{row.downTime}</TableCell>
                 </TableRow>

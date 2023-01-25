@@ -6,16 +6,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
   IconButton,
-  InputLabel,
   List,
   ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -27,13 +23,11 @@ import { useEffect } from "react";
 import axios from "axios";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-export function User() {
+export function Input() {
   const [showModal, setShowModal] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [inputs, setInputs] = useState([]);
   const [form, setForm] = useState({
-    userName: "",
-    password: "",
-    role: "",
+    inputName: "",
   });
   const [editOrAdd, setEditOrAdd] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -44,8 +38,8 @@ export function User() {
     if (fetchData) {
       (async function () {
         try {
-          const response = await axios.get("/user");
-          setUsers(response.data.users);
+          const response = await axios.get("/input");
+          setInputs(response.data.inputs);
           if (fetchData) setFetchData(false);
         } catch (error) {
           console.log(error);
@@ -55,18 +49,16 @@ export function User() {
     }
   }, [fetchData]);
 
-  const addUser = async () => {
+  const addInput = async () => {
     try {
       setLoader(true);
-      const response = await axios.post("/user", {
-        userName: form.userName,
-        password: form.password,
-        role: form.role,
+      const response = await axios.post("/input", {
+        inputName: form.inputName,
       });
       if (response.data.success) {
         setLoader(false);
         setFetchData(true);
-        setShowModal(false); 
+        setShowModal(false);
       }
     } catch (error) {
       console.log(error);
@@ -74,11 +66,11 @@ export function User() {
     }
   };
 
-  const editUser = async () => {
+  const editInput = async () => {
     try {
       setLoader(true);
-      const response = await axios.put(`/user/${form.userId}`, {
-        userName: form.userName,
+      const response = await axios.put(`/input/${form.inputId}`, {
+        inputName: form.inputName,
         password: form.password,
         role: form.role,
       });
@@ -93,10 +85,10 @@ export function User() {
     }
   };
 
-  const deleteUser = async () => {
+  const deleteInput = async () => {
     try {
       setLoader(true);
-      const response = await axios.delete(`/user/${form.userId}`);
+      const response = await axios.delete(`/input/${form.inputId}`);
       if (response.data.success) {
         setLoader(false);
         setFetchData(true);
@@ -117,57 +109,26 @@ export function User() {
         </DialogContentText>
         <TextField
           margin="dense"
-          id="username"
-          label="User name*"
+          id="inputname"
+          label="Input name*"
           type="text"
           fullWidth
-          value={form.userName}
+          value={form.inputName}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, userName: e.target.value }))
+            setForm((prev) => ({ ...prev, inputName: e.target.value }))
           }
         />
-        <TextField
-          margin="dense"
-          id="password"
-          label="Password*"
-          type="text"
-          fullWidth
-          value={form.password}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, password: e.target.value }))
-          }
-        />
-        <FormControl fullWidth sx={{ mt: 1 }}>
-          <InputLabel id="label">Role*</InputLabel>
-          <Select
-            labelId="label"
-            id="label"
-            label="Role*"
-            value={form.role}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, role: e.target.value }))
-            }
-          >
-            <MenuItem value={"admin"}>Admin</MenuItem>
-            <MenuItem value={"supervisor"}>Supervisor</MenuItem>
-            <MenuItem value={"mobileapp"}>Mobile App</MenuItem>
-          </Select>
-        </FormControl>
       </DialogContent>
       <DialogActions>
         <LoadingButton
           variant="contained"
           color="success"
           onClick={() => {
-            if (editOrAdd === "Add") addUser();
-            if (editOrAdd === "Edit") editUser();
+            if (editOrAdd === "Add") addInput();
+            if (editOrAdd === "Edit") editInput();
           }}
           loading={loader}
-          disabled={
-            form.userName.length < 1 ||
-            form.password.length < 1 ||
-            form.role.length < 1
-          }
+          disabled={form.inputName.length < 1}
         >
           Save
         </LoadingButton>
@@ -184,12 +145,12 @@ export function User() {
 
   const deleteModal = (
     <Dialog open={isDelete}>
-      <DialogTitle>Do you want delete {form.userName}?</DialogTitle>
+      <DialogTitle>Do you want delete {form.inputName}?</DialogTitle>
       <DialogActions>
         <LoadingButton
           sx={{ color: "gray" }}
           onClick={() => {
-            deleteUser();
+            deleteInput();
           }}
           loading={loader}
         >
@@ -210,23 +171,25 @@ export function User() {
           variant="outlined"
           fullWidth
           onClick={() => {
-            setForm({ userName: "", password: "", role: "" });
+            setForm({ inputName: "" });
             setEditOrAdd("Add");
             setShowModal(true);
           }}
         >
-          Add new User
+          Add new Input
         </Button>
         <List>
-          {users.map((user) => (
+          {inputs.map((input) => (
             <ListItem
-              key={user.userId}
+              key={input.inputId}
               secondaryAction={
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  disabled={user.userName === "admin"}
-                  onClick={() => {setForm(user); setIsDelete(true); }}
+                  onClick={() => {
+                    setForm(input);
+                    setIsDelete(true);
+                  }}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -234,7 +197,7 @@ export function User() {
             >
               <ListItemButton
                 onClick={() => {
-                  setForm(user);
+                  setForm(input);
                   setEditOrAdd("Edit");
                   setShowModal(true);
                 }}
@@ -244,7 +207,9 @@ export function User() {
                     <EditIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={user.userName} secondary={user.role} />
+                <ListItemText
+                  primary={input.inputName}
+                />
               </ListItemButton>
             </ListItem>
           ))}

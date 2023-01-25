@@ -13,6 +13,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import GroupIcon from "@mui/icons-material/Group";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import InputIcon from "@mui/icons-material/Input";
 import { useNavigate } from "react-router-dom";
 
 const settings = [
@@ -35,6 +36,11 @@ const settings = [
     title: "Device",
     Icon: <ListAltIcon fontSize="large" />,
     path: "/setting/device",
+  },
+  {
+    title: "Input",
+    Icon: <InputIcon fontSize="large" />,
+    path: "/setting/input",
   },
 ];
 

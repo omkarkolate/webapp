@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { RequireAuth } from "./components";
 import { useAuth } from "./context/AuthContext";
-import { Dashboard, Login, Logs, Setting, User } from "./pages";
+import { Dashboard, Device, Group, Input, Login, Logs, Setting, Shift, User } from "./pages";
 
 axios.defaults.baseURL = "http://192.168.0.146:4000";
 
@@ -15,7 +15,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async function(params) {
+    (async function() {
       const userId = localStorage.getItem("userId") || null;
       
       const getUser = async (userId) => {
@@ -39,7 +39,7 @@ function App() {
         setLoader(false);
       }    
     }) ()
-  }, []);
+  }, [navigate, setUser]);
 
   if (loader) {
     return <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh"}}>
@@ -50,7 +50,6 @@ function App() {
 
   if (user && user?.role === "admin") {
     return (
-      <>
         <Routes>
           <Route
             path="/"
@@ -84,14 +83,44 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route
+            path="setting/group"
+            element={
+              <RequireAuth>
+                <Group />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="setting/shift"
+            element={
+              <RequireAuth>
+                <Shift />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="setting/device"
+            element={
+              <RequireAuth>
+                <Device />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="setting/input"
+            element={
+              <RequireAuth>
+                <Input />
+              </RequireAuth>
+            }
+          />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<Login />} />
         </Routes>
-      </>
     );
   } else {
     return (
-      <>
         <Routes>
           <Route
             path="/"
@@ -104,7 +133,6 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="*" element={<Login />} />
         </Routes>
-      </>
     );
   } 
 }

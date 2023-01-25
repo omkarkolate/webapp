@@ -6,16 +6,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
   IconButton,
-  InputLabel,
   List,
   ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -27,13 +23,14 @@ import { useEffect } from "react";
 import axios from "axios";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-export function User() {
+export function Shift() {
   const [showModal, setShowModal] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [shifts, setShifts] = useState([]);
   const [form, setForm] = useState({
-    userName: "",
-    password: "",
-    role: "",
+    shiftName: "",
+    startTime: "",
+    endTime: "",
+    hours: "",
   });
   const [editOrAdd, setEditOrAdd] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -44,8 +41,8 @@ export function User() {
     if (fetchData) {
       (async function () {
         try {
-          const response = await axios.get("/user");
-          setUsers(response.data.users);
+          const response = await axios.get("/shift");
+          setShifts(response.data.shifts);
           if (fetchData) setFetchData(false);
         } catch (error) {
           console.log(error);
@@ -55,33 +52,10 @@ export function User() {
     }
   }, [fetchData]);
 
-  const addUser = async () => {
+  const addShift = async () => {
     try {
       setLoader(true);
-      const response = await axios.post("/user", {
-        userName: form.userName,
-        password: form.password,
-        role: form.role,
-      });
-      if (response.data.success) {
-        setLoader(false);
-        setFetchData(true);
-        setShowModal(false); 
-      }
-    } catch (error) {
-      console.log(error);
-      setLoader(false);
-    }
-  };
-
-  const editUser = async () => {
-    try {
-      setLoader(true);
-      const response = await axios.put(`/user/${form.userId}`, {
-        userName: form.userName,
-        password: form.password,
-        role: form.role,
-      });
+      const response = await axios.post("/shift", form);
       if (response.data.success) {
         setLoader(false);
         setFetchData(true);
@@ -93,10 +67,27 @@ export function User() {
     }
   };
 
-  const deleteUser = async () => {
+  const editShift = async () => {
     try {
       setLoader(true);
-      const response = await axios.delete(`/user/${form.userId}`);
+      const formCopy = {...form};
+      formCopy.shiftId = undefined;
+      const response = await axios.put(`/shift/${form.shiftId}`, formCopy);
+      if (response.data.success) {
+        setLoader(false);
+        setFetchData(true);
+        setShowModal(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoader(false);
+    }
+  };
+
+  const deleteShift = async () => {
+    try {
+      setLoader(true);
+      const response = await axios.delete(`/shift/${form.shiftId}`);
       if (response.data.success) {
         setLoader(false);
         setFetchData(true);
@@ -109,6 +100,17 @@ export function User() {
     }
   };
 
+  const isDisbled = () => {
+    if (
+      form.shiftName.length < 1 ||
+      form.startTime.length < 1 ||
+      form.endTime.length < 1
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const modal = (
     <Dialog open={showModal}>
       <DialogContent>
@@ -117,57 +119,59 @@ export function User() {
         </DialogContentText>
         <TextField
           margin="dense"
-          id="username"
-          label="User name*"
+          id="shiftname"
+          label="Shift name*"
           type="text"
           fullWidth
-          value={form.userName}
+          value={form.shiftName}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, userName: e.target.value }))
+            setForm((prev) => ({ ...prev, shiftName: e.target.value }))
           }
         />
         <TextField
           margin="dense"
-          id="password"
-          label="Password*"
-          type="text"
+          id="Start time"
+          label="Start time*"
+          type="time"
           fullWidth
-          value={form.password}
+          value={form.startTime}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, password: e.target.value }))
+            setForm((prev) => ({ ...prev, startTime: e.target.value }))
           }
         />
-        <FormControl fullWidth sx={{ mt: 1 }}>
-          <InputLabel id="label">Role*</InputLabel>
-          <Select
-            labelId="label"
-            id="label"
-            label="Role*"
-            value={form.role}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, role: e.target.value }))
-            }
-          >
-            <MenuItem value={"admin"}>Admin</MenuItem>
-            <MenuItem value={"supervisor"}>Supervisor</MenuItem>
-            <MenuItem value={"mobileapp"}>Mobile App</MenuItem>
-          </Select>
-        </FormControl>
+        <TextField
+          margin="dense"
+          id="End time"
+          label="End time*"
+          type="time"
+          fullWidth
+          value={form.endTime}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, endTime: e.target.value }))
+          }
+        />
+        <TextField
+          margin="dense"
+          id="Hours"
+          label="Hours*"
+          type="number"
+          fullWidth
+          value={form.hours}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, hours: e.target.value }))
+          }
+        />
       </DialogContent>
       <DialogActions>
         <LoadingButton
           variant="contained"
           color="success"
           onClick={() => {
-            if (editOrAdd === "Add") addUser();
-            if (editOrAdd === "Edit") editUser();
+            if (editOrAdd === "Add") addShift();
+            if (editOrAdd === "Edit") editShift();
           }}
           loading={loader}
-          disabled={
-            form.userName.length < 1 ||
-            form.password.length < 1 ||
-            form.role.length < 1
-          }
+          disabled={isDisbled()}
         >
           Save
         </LoadingButton>
@@ -184,12 +188,12 @@ export function User() {
 
   const deleteModal = (
     <Dialog open={isDelete}>
-      <DialogTitle>Do you want delete {form.userName}?</DialogTitle>
+      <DialogTitle>Do you want delete {form.shiftName}?</DialogTitle>
       <DialogActions>
         <LoadingButton
           sx={{ color: "gray" }}
           onClick={() => {
-            deleteUser();
+            deleteShift();
           }}
           loading={loader}
         >
@@ -210,23 +214,31 @@ export function User() {
           variant="outlined"
           fullWidth
           onClick={() => {
-            setForm({ userName: "", password: "", role: "" });
+            setForm({
+              shiftName: "",
+              startTime: "",
+              endTime: "",
+              hours: "",
+            });
             setEditOrAdd("Add");
             setShowModal(true);
           }}
         >
-          Add new User
+          Add new Shift
         </Button>
         <List>
-          {users.map((user) => (
+          {shifts.map((shift) => (
             <ListItem
-              key={user.userId}
+              key={shift.shiftId}
               secondaryAction={
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  disabled={user.userName === "admin"}
-                  onClick={() => {setForm(user); setIsDelete(true); }}
+                  disabled={shift.shiftName === "admin"}
+                  onClick={() => {
+                    setForm(shift);
+                    setIsDelete(true);
+                  }}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -234,7 +246,7 @@ export function User() {
             >
               <ListItemButton
                 onClick={() => {
-                  setForm(user);
+                  setForm(shift);
                   setEditOrAdd("Edit");
                   setShowModal(true);
                 }}
@@ -244,7 +256,10 @@ export function User() {
                     <EditIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={user.userName} secondary={user.role} />
+                <ListItemText
+                  primary={shift.shiftName}
+                  secondary={shift.startTime + " - " + shift.endTime}
+                />
               </ListItemButton>
             </ListItem>
           ))}
