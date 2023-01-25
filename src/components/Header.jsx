@@ -1,34 +1,30 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Divider } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 
-const pages = ["Dashboard", "Logs", "Setting"];
+const adminPages = ["Dashboard", "Logs", "Setting"];
+const supervisorPages = ["Logs"];
 
-export function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+export function Header({active}) {
+  const navigate = useNavigate();
+  const { user, setUser } = useAuth();
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AutoGraphIcon fontSize="large" sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <AutoGraphIcon
+            fontSize="large"
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -46,82 +42,70 @@ export function Header() {
           >
             ESBEEE Andon Monitor System
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AutoGraphIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Omkar
-          </Typography>
           <Box
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
-                          justifyContent: "flex-end",
-              mr: 4
+              justifyContent: "flex-end",
+              mr: 4,
             }}
           >
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-          <Box>
-            <Button variant="contained" color="secondary" >Log out</Button>           
+            {user.role === "admin"
+              ? adminPages.map((page) => (
+                  <Button
+                    key={page}
+                    sx={{
+                      my: 2,
+                      color: "white",
+                      display: "block",
+                      border: active === page ? "1px solid white" : "0px",
+                    }}
+                    component={NavLink}
+                    to={page === "Dashboard" ? "/" : `/${page.toLowerCase()}`}
+                  >
+                    {page}
+                  </Button>
+                ))
+              : supervisorPages.map((page) => (
+                  <Button
+                    key={page}
+                    sx={{
+                      my: 2,
+                      color: "white",
+                      display: "block",
+                      border: active === page ? "1px solid white" : "0px",
+                    }}
+                    component={NavLink}
+                    to={page === "Logs" ? "/" : `/${page.toLowerCase()}`}
+                  >
+                    {page}
+                  </Button>
+                ))}
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ bgcolor: "white", mx: 1 }}
+            />
+            <Typography
+              sx={{
+                alignSelf: "center",
+                alignItems: "center",
+                display: "flex",
+              }}
+            >
+              <PersonIcon /> {user.userName}
+            </Typography>
+            <Button
+              variant="outlined"
+              sx={{ alignSelf: "center", ml: 1, color: "white" }}
+              onClick={() => {
+                localStorage.removeItem("userId");
+                setUser(null);
+                navigate("/login");
+              }}
+            >
+              Log out
+            </Button>
           </Box>
         </Toolbar>
       </Container>

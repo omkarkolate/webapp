@@ -11,7 +11,9 @@ import {
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useState } from "react";
-// import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export function Login() {
   const [userName, setUserName] = useState("");
@@ -19,18 +21,34 @@ export function Login() {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ isShow: false });
 
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
+
   async function handleLogin(e) {
-    e.preventDefault();
-    setLoading(true);
-    // if (alert.isShow) setAlert({ isShow: false });
-    // setLoading(true);
-    // // const response = await logInWithUserNameAndPassword(userName, password);
-    // setLoading(false);
-    // if (response.success) {
-    // //   navigate("/", { replace: true });
-    // } else {
-    //   setAlert({ isShow: true, ...response });
-    // }
+    try {
+      e.preventDefault();
+      setLoading(true);
+      if (alert.isShow) setAlert({ isShow: false });
+      setLoading(true);
+      const response = await axios.post("/login", { userName, password });
+      setLoading(false);
+      if (
+        (response.data.success && response.data.user.role === "admin") ||
+        response.data.user.role === "supervisor"
+      ) {
+        localStorage.setItem("userId", response.data.user.userId);
+        setUser(response.data.user);
+        navigate(from, { replace: true });
+      } else {
+        setAlert({ isShow: true });
+      }
+    } catch (error) {
+      console.log(error);
+      setAlert({ isShow: true });
+    }
   }
 
   return (
@@ -98,7 +116,7 @@ export function Login() {
             size="large"
             sx={{ mt: 3, mb: 2 }}
             loading={loading}
-            loadingPosition="end"
+            disabled={userName.length < 1 || password.length < 1}
           >
             Log in
           </LoadingButton>
