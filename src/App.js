@@ -121,18 +121,26 @@ function App() {
     );
   } else {
     return (
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Logs />
-              </RequireAuth>
-            }
-          />
-          <Route path="login" element={<Login />} />
-          <Route path="*" element={<Login />} />
-        </Routes>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="logs"
+          element={
+            <RequireAuth>
+              <Logs />
+            </RequireAuth>
+          }
+        />
+        <Route path="login" element={<Login />} />
+        <Route path="*" element={<Login />} />
+      </Routes>
     );
   } 
 }

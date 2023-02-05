@@ -33,14 +33,14 @@ const settings = [
     path: "/setting/shift",
   },
   {
-    title: "Device",
-    Icon: <ListAltIcon fontSize="large" />,
-    path: "/setting/device",
-  },
-  {
     title: "Input",
     Icon: <InputIcon fontSize="large" />,
     path: "/setting/input",
+  },
+  {
+    title: "Device",
+    Icon: <ListAltIcon fontSize="large" />,
+    path: "/setting/device",
   },
 ];
 

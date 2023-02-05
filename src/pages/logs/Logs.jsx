@@ -37,7 +37,7 @@ export function Logs() {
             maxHeight: "82vh",
           }}
         >
-          <Table sx={{}} stickyHeader aria-label="sticky table">
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell>Index</TableCell>
@@ -53,13 +53,19 @@ export function Logs() {
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
-                <TableRow key={row.logId} hover>
+                <TableRow
+                  key={row.logId}
+                  hover
+                  sx={{
+                    bgcolor: row.status === "Problem" ? "#f7b0b0" : "#d4f6d4",
+                  }}
+                >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     {new Date(row.date).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    {new Date(row.date).toLocaleTimeString('en')}
+                    {new Date(row.date).toLocaleTimeString("en")}
                   </TableCell>
                   <TableCell>{row.shift}</TableCell>
                   <TableCell>{row.groupName}</TableCell>
