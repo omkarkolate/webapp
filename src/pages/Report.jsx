@@ -5,36 +5,100 @@ import TableContainer from "@mui/material/TableContainer";
 import { useEffect } from "react";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Box } from "@mui/material";
-import { Header } from "../../components";
+import { Box, Button, Stack, TextField } from "@mui/material";
+import { Header } from "../components";
 import axios from "axios";
 import { useState } from "react";
+import { CSVLink } from "react-csv";
 
-export function Logs() {
+const getYyyyMmDd = (date) => {
+  return date.toLocaleDateString("en-IN", {year: 'numeric', month: '2-digit', day: '2-digit'})
+            .split("/")
+            .reverse()
+            .join("-")
+}
+
+const headers = ["Index","Date", "Time", "Shift", "Group", "Device", "Input", "Status", "Down Time"];
+
+export function Report() {
   const [rows, setRows] = useState([]);
-  useEffect(() => {
-    const getLogs = async () => {
-      try {
-        const response = await axios.get("/log");
-        setRows(response.data.logs);
-      } catch (error) {
-        
-      }
-      
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+
+  const getReport = async () => {
+    try {
+      const response = await axios.post('/report', {fromDate, toDate});
+      setRows(response.data.logs);
+    } catch (error) {
+      console.log(error);
     }
-    getLogs();
-  }, []);
+  }
+
+  const data = rows.map((row, index) => (
+    {
+      Index: index,
+      Date: new Date(row.date).toLocaleDateString(),
+      Time: new Date(row.date).toLocaleTimeString("en"),
+      Shift: row.shift,
+      Group: row.groupName,
+      Device: row.deviceName,
+      Input: row.input,
+      Status: row.status,
+      'Down Time': row.downTime,
+    }
+  ));
 
   return (
     <Box sx={{ width: "100%", overflow: "hidden" }}>
-      <Header active="Logs" />
+      <Header active="Report" />
+      <Stack direction="row" m={2} spacing={2}>
+        <TextField
+          label="From date"
+          type="date"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          defaultValue={fromDate}
+          onChange={(e) => setFromDate(e.target.value)}
+        />
+        <TextField
+          label="To date"
+          type="date"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          defaultValue={toDate}
+          onChange={(e) => setToDate(e.target.value)}
+        />
+        <Button
+          variant="contained"
+          disabled={fromDate === "" || toDate === ""}
+          onClick={getReport}
+        >
+          Generate Report
+        </Button>
+        <Button
+          variant="contained"
+          color="info"
+          disabled={rows.length < 1}
+        >
+          <CSVLink
+            data={data}
+            headers={headers}
+            filename={Date.now()}
+            style={{ textDecoration: "none", color: 'white' }}
+          >
+            Download Report
+          </CSVLink>
+        </Button>
+      </Stack>
       <Box m={2}>
         <TableContainer
           sx={{
             mx: "auto",
             border: 1,
             borderColor: "#e0e0e0",
-            maxHeight: "82vh",
+            maxHeight: "75vh",
           }}
         >
           <Table stickyHeader aria-label="sticky table">

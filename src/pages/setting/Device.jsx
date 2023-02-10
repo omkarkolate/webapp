@@ -14,6 +14,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  ListSubheader,
   MenuItem,
   Select,
   TextField,
@@ -44,7 +45,6 @@ const defaultDeviceState = {
 
 export function Device() {
   const [showModal, setShowModal] = useState(false);
-  const [devices, setDevices] = useState([]);
   const [groups, setGroups] = useState([]);
   const [inputs, setInputs] = useState([]);
   const [form, setForm] = useState(defaultDeviceState);
@@ -52,8 +52,7 @@ export function Device() {
   const [loader, setLoader] = useState(false);
   const [fetchData, setFetchData] = useState(true);
   const [isDelete, setIsDelete] = useState(false);
-
-
+  const [devicesByGroup, setDevicesByGroup] = useState({});
 
   useEffect(() => {
     if (fetchData) {
@@ -65,7 +64,7 @@ export function Device() {
             axios.get("/input"),
           ]);
 
-          setDevices(responses[0].data.devices);
+          setDevicesByGroup(responses[0].data.devicesByGroup);
           setGroups(responses[1].data.groups);
           setInputs(responses[2].data.inputs);
           if (fetchData) setFetchData(false);
@@ -287,39 +286,48 @@ export function Device() {
         >
           Add new Device
         </Button>
-        <List>
-          {devices.map((device) => (
-            <ListItem
-              key={device.deviceId}
-              secondaryAction={
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => {
-                    setForm(device);
-                    setIsDelete(true);
-                  }}
+        {Object.keys(devicesByGroup).map((groupName) => (
+          <List
+            key={groupName}
+            subheader={
+              <ListSubheader sx={{ fontSize: "1rem" }}>
+                {groupName}
+              </ListSubheader>
+            }
+          >
+            <List>
+              {devicesByGroup[groupName].map((device) => (
+                <ListItem
+                  key={device.deviceId}
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => {
+                        setForm(device);
+                        setIsDelete(true);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  }
                 >
-                  <DeleteIcon />
-                </IconButton>
-              }
-            >
-              <ListItemButton
-                onClick={() => onEdit(device)}
-              >
-                <ListItemAvatar>
-                  <Avatar>
-                    <EditIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={device.deviceName}
-                  secondary={device.groupName}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+                  <ListItemButton onClick={() => onEdit(device)}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <EditIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={device.deviceName}
+                      secondary={device.groupName}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </List>
+        ))}
       </Container>
       {showModal && modal} {isDelete && deleteModal}
     </Box>
