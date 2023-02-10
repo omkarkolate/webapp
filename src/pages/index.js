@@ -7,3 +7,4 @@ export { Shift } from "./setting/Shift";
 export { Group } from "./setting/Group";
 export { Device } from "./setting/Device";
 export { Input } from "./setting/Input";
+export { Report } from "./Report";

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { RequireAuth } from "./components";
 import { useAuth } from "./context/AuthContext";
-import { Dashboard, Device, Group, Input, Login, Logs, Setting, Shift, User } from "./pages";
+import { Dashboard, Device, Group, Input, Login, Logs, Setting, Shift, User, Report } from "./pages";
 
 axios.defaults.baseURL = "http://192.168.0.146:4000";
 
@@ -68,6 +68,14 @@ function App() {
             }
           />
           <Route
+            path="report"
+            element={
+              <RequireAuth>
+                <Report />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="setting"
             element={
               <RequireAuth>
@@ -116,7 +124,6 @@ function App() {
             }
           />
           <Route path="login" element={<Login />} />
-          <Route path="*" element={<Login />} />
         </Routes>
     );
   } else {
@@ -138,8 +145,15 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="report"
+          element={
+            <RequireAuth>
+              <Report />
+            </RequireAuth>
+          }
+        />
         <Route path="login" element={<Login />} />
-        <Route path="*" element={<Login />} />
       </Routes>
     );
   } 

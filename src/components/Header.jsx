@@ -12,8 +12,8 @@ import { Stack } from "@mui/system";
 import logo from "../assets/images/ESBEE_EPS_logo.png";
 import axios from "axios";
 
-const adminPages = ["Dashboard", "Logs", "Setting"];
-const supervisorPages = ["Dashboard","Logs"];
+const adminPages = ["Dashboard", "Logs", "Report", "Setting"];
+const supervisorPages = ["Dashboard","Logs", "Report",];
 
 export function Header({active}) {
   const navigate = useNavigate();
